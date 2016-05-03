@@ -40,7 +40,7 @@ else
 fi
 echo ""
 
-NONCE=$(shuf -n10  /usr/share/dict/words | grep -v "'" | head -1)
+NONCE=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 echo "testing http with nonce: ${NONCE}"
 IP=$(curl -s ifconfig.co)
 sed "s/NONCE/${NONCE}/g" http.jpg > http1.jpg
