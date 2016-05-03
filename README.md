@@ -2,7 +2,7 @@
 
 ## How To Use
 ```
-git clone git@github.com:ImageTragick/PoCs.git
+git clone https://github.com/ImageTragick/PoCs.git
 cd POCs
 ./test.sh
 ```
