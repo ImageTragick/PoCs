@@ -7,7 +7,7 @@ cd POCs
 ./test.sh
 ```
 
-To test a `polixy.xml` file place it in the script directory and run `test.sh`.
+To test a `policy.xml` file place it in the script directory and run `test.sh`.
 
 ## Safe Output
 ```
