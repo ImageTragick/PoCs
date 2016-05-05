@@ -42,13 +42,13 @@ echo ""
 
 NONCE=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 echo "testing http with nonce: ${NONCE}"
-IP=$(curl -s ifconfig.co)
+IP=$(curl -q -s ifconfig.co)
 sed "s/NONCE/${NONCE}/g" http.jpg > http1.jpg
 #echo "#### identify ######"
 identify http1.jpg 2>/dev/null 1>/dev/null
 #echo "####################"
 rm http1.jpg
-if curl -s "http://hacker.toys/dns?query=${NONCE}.imagetragick" | grep -q $IP; then
+if curl -q -s "http://hacker.toys/dns?query=${NONCE}.imagetragick" | grep -q $IP; then
     echo "UNSAFE"
 else
     echo "SAFE"
