@@ -18,6 +18,9 @@ SAFE
 testing delete
 SAFE
 
+testing http with local port: 38663
+SAFE
+
 testing http with nonce: a7DyBeV7
 SAFE
 
@@ -38,6 +41,9 @@ testing read
 UNSAFE
 
 testing delete
+UNSAFE
+
+testing http with local port: 44755
 UNSAFE
 
 testing http with nonce: a7DvBer2
