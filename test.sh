@@ -40,6 +40,30 @@ else
 fi
 echo ""
 
+#random port above 16K
+PORT=$(($RANDOM + 16384))
+echo "testing http with local port: ${PORT}"
+# silence job control messages
+set -b
+# setup a dummy http server
+printf \"HTTP/1.0 200 OK\n\n\" | nc -l ${PORT} > requestheaders 2>/dev/null &
+if test $? -ne 0; then
+    echo >&2 "failed to listen on localhost:${PORT}"
+    exit 1
+fi
+sed "s/PORT/${PORT}/g" localhost_http.jpg > localhost_http1.jpg
+identify localhost_http1.jpg 2>/dev/null 1>/dev/null
+rm localhost_http1.jpg
+if test -s requestheaders; then
+    echo "UNSAFE"
+else
+    echo "SAFE"
+    echo | nc localhost ${PORT} 2>/dev/null 1>/dev/null
+fi
+rm requestheaders
+set +b
+echo ""
+
 NONCE=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 echo "testing http with nonce: ${NONCE}"
 IP=$(curl -q -s ifconfig.co)
