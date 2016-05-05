@@ -3,7 +3,7 @@
 ## How To Use
 ```
 git clone https://github.com/ImageTragick/PoCs.git
-cd POCs
+cd PoCs
 ./test.sh
 ```
 
