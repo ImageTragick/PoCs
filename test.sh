@@ -67,7 +67,7 @@ echo ""
 NONCE=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 echo "testing http with nonce: ${NONCE}"
 IP=$(curl -q -s ifconfig.co)
-sed "s/NONCE/${NONCE}/g" http.jpg > http1.jpg
+sed "s:NONCE:${NONCE}:g" http.jpg > http1.jpg
 #echo "#### identify ######"
 identify http1.jpg 2>/dev/null 1>/dev/null
 #echo "####################"
