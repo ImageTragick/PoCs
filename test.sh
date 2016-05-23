@@ -10,6 +10,20 @@ type convert >/dev/null 2>&1 || { echo >&2 "I require imagemagick but it's not i
 MAGICK_CONFIGURE_PATH=$DIR
 export MAGICK_CONFIGURE_PATH
 
+# Finding MD5 calculator
+#echo "finding MD5 calculator"
+for f in md5sum md5
+do
+    MD5SUM_EXE=`which $f 2> /dev/null`
+    if test ${MD5SUM_EXE}; then
+        break
+    fi
+done
+if ! test ${MD5SUM_EXE}; then
+    echo >&2 "not found. Aborting."
+    exit 1
+fi
+
 echo "testing read"
 echo "Hello World" > readme
 #echo "##### convert ######"
@@ -46,7 +60,7 @@ echo "testing http with local port: ${PORT}"
 # silence job control messages
 set -b
 # setup a dummy http server
-printf \"HTTP/1.0 200 OK\n\n\" | nc -l ${PORT} > requestheaders 2>/dev/null &
+printf "HTTP/1.0 200 OK\n\n" | nc -l ${PORT} > requestheaders 2>/dev/null &
 if test $? -ne 0; then
     echo >&2 "failed to listen on localhost:${PORT}"
     exit 1
@@ -58,13 +72,14 @@ if test -s requestheaders; then
     echo "UNSAFE"
 else
     echo "SAFE"
-    echo | nc localhost ${PORT} 2>/dev/null 1>/dev/null
+    # terminate the dummy server
+    nc -z localhost ${PORT} 2>/dev/null >/dev/null
 fi
 rm requestheaders
 set +b
 echo ""
 
-NONCE=$(echo $RANDOM | md5sum | fold -w 8 | head -n 1)
+NONCE=$(echo $RANDOM | ${MD5SUM_EXE} | fold -w 8 | head -n 1)
 echo "testing http with nonce: ${NONCE}"
 IP=$(curl -q -s ifconfig.co)
 sed "s:NONCE:${NONCE}:g" http.jpg > http1.jpg
